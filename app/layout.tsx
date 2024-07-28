@@ -31,7 +31,7 @@ export default async function RootLayout({
         <AuthProvider session={session}>
           <Suspense fallback={<Loading />}>
             <div className="w-full flex">
-              <div className="md:w-[15%] sticky top-0 left-0 overflow-hidden">
+              <div className="md:w-[15%] fixed top-0 left-0 overflow-hidden">
                 <Sidebar />
               </div>
               <div className="w-full md:w-[85%]">{children}</div>
