@@ -58,6 +58,7 @@ const Sidebar: React.FC = () => {
         </div>
         <Link
           href="https://github.com/gauravdubey19/next-project-task-mange"
+          target="_blank"
           className="w-full flex-center gap-4 p-4 font-semibold text-lg bg-zinc-200 rounded-2xl scale-95 hover:scale-100 active:scale-95 active:translate-y-1 ease-in-out duration-300 overflow-hidden"
         >
           <FaGithub size={25} /> Source Code
