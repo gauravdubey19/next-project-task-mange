@@ -8,13 +8,13 @@ import { register } from "@/app/actions/auth.actions";
 import { toast } from "./ui/use-toast";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
-const AuthForm = () => {
+const AuthForm: React.FC = () => {
   const pathname = usePathname();
   const router = useRouter();
   const { status: sessionStatus } = useSession(); //session
   // console.log(sessionStatus);
 
-  if (sessionStatus === "authenticated") return router.replace("/");
+  if (sessionStatus === "authenticated") router.replace("/");
 
   return (
     <section className="h-screen w-full bg-gradient-to-b from-violet-200 to-violet-700 flex-center p-4">
@@ -75,7 +75,7 @@ const SignInForm: React.FC<{ router: ReturnType<typeof useRouter> }> = ({
     }
 
     try {
-      console.log(email, password);
+      // console.log(email, password);
       const res = await signIn("credentials", {
         redirect: false,
         email,

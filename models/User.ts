@@ -19,3 +19,8 @@ userSchema.methods.comparePassword = async function (
 };
 
 export default mongoose.models.User || mongoose.model("User", userSchema);
+
+// export type UserType = {
+//   email: string;
+//   password: string;
+// };
