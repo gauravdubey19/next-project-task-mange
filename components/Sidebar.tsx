@@ -17,7 +17,7 @@ const Sidebar: React.FC = () => {
   if (pathname == "/sign-in" || pathname == "/sign-up") return null;
   return (
     <>
-      <div className="hidden md:flex-between flex-col w-full h-screen border-r shadow-xl px-1.5 py-4 overflow-hidden">
+      <div className="hidden sticky top-0 left-0 md:flex-between flex-col w-full h-screen border-r shadow-xl px-1.5 py-4 overflow-hidden">
         <div className="flex flex-col gap-4">
           <div className="animate-slide-down flex-between flex-wrap capitalize font-bold">
             <div className="text-xl">{user?.fullname || "GoTask"}</div>
