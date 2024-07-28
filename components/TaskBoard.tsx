@@ -57,7 +57,7 @@ const BoardContent: React.FC<{ cards: TasksValues[] }> = ({ cards }) => {
   }, [cards, cardsState]);
 
   return (
-    <div className="flex h-full w-full gap-3 overflow-scroll p-12">
+    <div className="flex h-full w-full gap-3 p-5 overflow-scroll">
       <Column
         title="To Do"
         status="To Do"
@@ -130,19 +130,17 @@ const DeleteTask: React.FC<DeleteTaskProps> = ({ setCards }) => {
   };
 
   return (
-    <div className="overflow-hidden">
-      <div
-        onDrop={handleDragEnd}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        className={`animate-slide-up mt-10 grid h-56 w-56 shrink-0 place-content-center rounded border text-3xl ${
-          active
-            ? "border-red-800 bg-red-800/20 text-red-500"
-            : "border-neutral-500 bg-neutral-500/20 text-neutral-500"
-        }`}
-      >
-        {active ? <FaFire className="animate-bounce" /> : <FiTrash />}
-      </div>
+    <div
+      onDrop={handleDragEnd}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      className={`animate-slide-up mt-10 grid h-56 w-56 shrink-0 place-content-center rounded border text-3xl ${
+        active
+          ? "border-red-800 bg-red-800/20 text-red-500"
+          : "border-neutral-500 bg-neutral-500/20 text-neutral-500"
+      }`}
+    >
+      {active ? <FaFire className="animate-bounce" /> : <FiTrash />}
     </div>
   );
 };
@@ -192,6 +190,7 @@ const Column: React.FC<ColumnProps> = ({
       let copy = [...cards];
       let cardToTransfer = copy.find((c) => c._id === cardId);
       if (!cardToTransfer) return;
+      const oldStatus = cardToTransfer.status;
       cardToTransfer = { ...cardToTransfer, status };
 
       copy = copy.filter((c) => c._id !== cardId);
@@ -207,7 +206,7 @@ const Column: React.FC<ColumnProps> = ({
       }
 
       setCards(copy);
-      await updateStatusInDB(cardId, status);
+      if (oldStatus !== status) await updateStatusInDB(cardId, status);
     }
   };
 
@@ -271,7 +270,7 @@ const Column: React.FC<ColumnProps> = ({
   const filteredCards = cards.filter((c) => c.status === status);
 
   return (
-    <div className="w-56 shrink-0 overflow-hidden">
+    <div className="w-52 shrink-0">
       <div className="animate-slide-down mb-3 flex items-center justify-between">
         <h3 className={`font-medium ${headingColor}`}>{title}</h3>
         <span className="rounded text-sm text-neutral-400">
@@ -330,7 +329,7 @@ const Card: React.FC<CardProps> = ({
 
   return (
     <>
-      <div className="p-1 overflow-hidden">
+      <div className="overflow-hidden">
         <DropIndicator beforeId={_id} status={status} />
         <motion.div
           layout
@@ -339,14 +338,14 @@ const Card: React.FC<CardProps> = ({
           onDragStart={handleDragStartWrapper}
           className="animate-slide-up cursor-grab flex flex-col gap-1 p-3 rounded-2xl text-black bg-slate-200 shadow-lg hover:scale-105 active:cursor-grabbing ease-in-out duration-500 overflow-hidden"
         >
-          <div className="text-lg font-bold text-balance">{title}</div>
+          <div className="text-md font-bold text-balance">{title}</div>
           <div className="text-sm text-wrap">{description}</div>
           <div
-            className={`w-fit text-ms text-white rounded-2xl flex-center py-1 px-3 ${priority === "Urgent" ? "bg-red-500" : priority === "Medium" ? "bg-violet-600" : "bg-green-500"}`}
+            className={`w-fit text-sm text-white rounded-2xl flex-center py-1 px-3 ${priority === "Urgent" ? "bg-red-500" : priority === "Medium" ? "bg-violet-600" : "bg-green-500"}`}
           >
             {priority}
           </div>
-          <div className="w-full text-ms flex items-center gap-4 p-2 md:pr-5">
+          <div className="w-full text-sm flex items-center gap-4 p-2 md:pr-5">
             <BsClockHistory size={25} />
             {new Date(deadline).toLocaleString()}
           </div>

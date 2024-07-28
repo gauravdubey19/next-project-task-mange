@@ -16,13 +16,13 @@ const Sidebar: React.FC = () => {
   if (pathname == "/sign-in" || pathname == "/sign-up") return null;
   return (
     <>
-      <div className="hidden sticky top-0 left-0 lg:flex flex-col gap-6 w-[20rem] h-screen border shadow-xl p-4 overflow-hidden">
+      <div className="hidden sticky top-0 left-0 md:flex flex-col gap-4 w-full h-full border-r shadow-xl px-1.5 py-4 overflow-hidden">
         <div className="animate-slide-down flex-between flex-wrap capitalize font-bold">
           <div className="text-xl">{user?.fullname || "GoTask"}</div>
           {session && (
             <button
               onClick={async () => await signOut()}
-              className="text-md text-white bg-violet-700 hover:bg-violet-500 px-4 py-2 rounded-lg shadow-lg active:translate-y-0.5"
+              className="text-sm text-white bg-violet-700 hover:bg-violet-500 px-2 py-1 rounded-lg shadow-lg active:translate-y-0.5"
             >
               Log Out
             </button>
@@ -46,7 +46,7 @@ const Sidebar: React.FC = () => {
           <div className="p-2 overflow-hidden">
             <Link
               href="/create-task"
-              className="animate-slide-down w-full flex-center gap-2 text-white bg-violet-700 hover:bg-violet-500 p-4 rounded-lg shadow-md active:translate-y-0.5"
+              className="animate-slide-down w-full flex-center gap-2 text-sm text-white bg-violet-700 hover:bg-violet-500 p-2 rounded-lg shadow-md active:translate-y-0.5"
             >
               <LuCalendarPlus />
               Create new task
