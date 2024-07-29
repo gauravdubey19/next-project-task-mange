@@ -15,7 +15,7 @@ const Task: React.FC = () => {
   const { data: session } = useSession();
 
   const user = session?.user as UserSession["user"];
-  const firstname = user?.fullname ? user?.fullname.split(" ")[0] : "User";
+  const firstname = user?.name ? user?.name.split(" ")[0] : "User";
 
   return (
     <section className="w-full flex flex-col gap-4 mb-2 overflow-hidden">

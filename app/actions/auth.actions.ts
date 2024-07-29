@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 import User from "@/models/User";
 import { RegisterParams } from "@/lib/types";
 
-const register = async ({ fullname, email, password }: RegisterParams) => {
+const register = async ({ name, email, password }: RegisterParams) => {
   try {
     await connectDB();
 
@@ -14,7 +14,7 @@ const register = async ({ fullname, email, password }: RegisterParams) => {
 
     const hashPswd = await bcrypt.hash(password, 5); // hashing pasword
 
-    const user = new User({ fullname, email, password: hashPswd });
+    const user = new User({ name, email, password: hashPswd });
     await user.save();
 
     console.log("Registration successful!");
@@ -26,11 +26,7 @@ const register = async ({ fullname, email, password }: RegisterParams) => {
 };
 
 // will continue
-const forgotPassword = async ({
-  fullname,
-  email,
-  password,
-}: RegisterParams) => {
+const forgotPassword = async ({ name, email, password }: RegisterParams) => {
   try {
     await connectDB();
 

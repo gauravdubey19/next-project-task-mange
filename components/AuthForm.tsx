@@ -209,7 +209,7 @@ const SignUpForm: React.FC<{ router: ReturnType<typeof useRouter> }> = ({
 
     try {
       // console.log(fullName, email, password);
-      const res = await register({ fullname: fullName, email, password });
+      const res = await register({ name: fullName, email, password });
       console.log(res);
 
       if (res == "ok") {

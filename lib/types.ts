@@ -1,7 +1,7 @@
 import { User as AuthUser, Session as NextAuthSession } from "next-auth";
 
 export interface RegisterParams {
-  fullname: string;
+  name: string;
   email: string;
   password: string;
 }
@@ -24,7 +24,7 @@ export interface CustomToken extends Record<string, any> {
 export interface UserSession extends NextAuthSession {
   user: {
     _id?: string;
-    fullname?: string;
+    name?: string;
     email: string;
     role?: string;
   };
