@@ -3,7 +3,7 @@
 import connectDB from "@/utils/db";
 import User from "@/models/User";
 import UserTask from "@/models/UserTask";
-import { TaskParams } from "@/lib/types";
+import { TaskParams, TasksValues } from "@/lib/types";
 import { getServerSession } from "next-auth";
 
 const getEmail = async (): Promise<string> => {
@@ -22,8 +22,11 @@ const getEmail = async (): Promise<string> => {
   }
 };
 
-const getTasks = async ({ email }: { email: string }) => {
+const getTasks = async () => {
   try {
+    const email = await getEmail();
+    if (!email) return "no-email";
+
     await connectDB();
     const userTasks: any = await UserTask.findOne({ email }).lean();
     const tasksList = userTasks?.tasks.map(
@@ -50,7 +53,7 @@ const addTask = async ({
 }: TaskParams) => {
   try {
     const email = await getEmail();
-    if (!email) return "email-not-found";
+    if (!email) return "no-email";
 
     await connectDB();
 
@@ -99,7 +102,7 @@ const addTask = async ({
 const deleteTask = async ({ cardId }: { cardId: string }) => {
   try {
     const email = await getEmail();
-    if (!email) return "email-not-found";
+    if (!email) return "no-email";
 
     await connectDB();
 
@@ -126,7 +129,7 @@ const deleteTask = async ({ cardId }: { cardId: string }) => {
 const updateStatus = async (cardId: string, newStatus: string) => {
   try {
     const email = await getEmail();
-    if (!email) return "email-not-found";
+    if (!email) return "no-email";
 
     await connectDB();
 
@@ -149,31 +152,44 @@ const updateStatus = async (cardId: string, newStatus: string) => {
   }
 };
 
-// const searchTasks = async ({ title }: { title: string }) => {
-//   try {
-//     const email = await getEmail();
-//     if (!email) return "email-not-found";
+interface UserTasks {
+  email: string;
+  tasks: TasksValues[];
+}
 
-//     await connectDB();
+const searchTasks = async ({ title }: { title: string }) => {
+  if (!title.trim()) return { error: "no-title" };
+  try {
+    const email = await getEmail();
+    if (!email) return { error: "no-email" };
 
-//     const userTasks = await UserTask.findOne({ email });
-//     if (!userTasks) return "doesn't-exists";
+    await connectDB();
 
-//     const tasks = await UserTask.find({ "tasks.title": title });
-//     console.log(tasks);
+    const userTasks = (await UserTask.findOne({
+      email,
+    }).lean()) as UserTasks | null;
+    if (!userTasks) return { error: "doesn't-exist" };
 
-//     // const tasksList = tasks?.tasks.map(
-//     //   (task: { _id: { toString: () => any } }) => ({
-//     //     ...task,
-//     //     _id: task._id.toString(), // Convert _id to string
-//     //     // createdAt: project?.createdAt?.toISOString(), // Convert date to ISO string if exists
-//     //     // updatedAt: project?.updatedAt?.toISOString(), // Convert date to ISO string if exists
-//     //   })
-//     // );
-//     // return tasksList || [];
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
+    const regex = new RegExp(title, "i");
 
-export { getTasks, addTask, deleteTask, updateStatus };
+    const tasksList = userTasks.tasks
+      .filter((task: TasksValues) => regex.test(task.title))
+      .map((task: TasksValues) => ({
+        _id: task._id.toString(),
+        title: task.title,
+        description: task.description,
+        status: task.status,
+        priority: task.priority,
+        deadline: task.deadline,
+        datetime: new Date(task.datetime).toISOString(),
+      }));
+
+    // console.log(tasksList);
+    return tasksList;
+  } catch (error) {
+    console.error("Error: ", error);
+    return { error: "Error while searching tasks..." };
+  }
+};
+
+export { getTasks, addTask, deleteTask, updateStatus, searchTasks };

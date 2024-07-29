@@ -20,23 +20,19 @@ import { toast } from "./ui/use-toast";
 
 export default function TaskBoard() {
   const [userTasks, setUserTasks] = useState<TasksValues[] | []>([]);
-  const { data: session } = useSession();
-  const email = session?.user?.email;
 
   useEffect(() => {
     const fetchUserTasks = async () => {
-      if (email) {
-        try {
-          const res = await getTasks({ email });
-          if (res) setUserTasks(res);
-        } catch (error) {
-          console.error("Failed to fetch tasks:", error);
-        }
+      try {
+        const res = await getTasks();
+        if (res) setUserTasks(res);
+      } catch (error) {
+        console.error("Failed to fetch tasks:", error);
       }
     };
 
     if (userTasks?.length === 0) fetchUserTasks();
-  }, [email, userTasks]);
+  }, [userTasks]);
   // console.log(userTasks);
 
   return (
@@ -282,21 +278,22 @@ const Column: React.FC<ColumnProps> = ({
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         className={`h-full w-full transition-colors ${
-          active ? "bg-neutral-100/10" : ""
+          active ? "bg-neutral-100/20" : "bg-neutral-100/0"
         }`}
       >
         {filteredCards.map((c) => (
-          <Card
-            key={c._id}
-            _id={c._id}
-            title={c.title}
-            description={c.description}
-            priority={c.priority}
-            deadline={c.deadline}
-            datetime={c.datetime}
-            status={c.status}
-            handleDragStart={handleDragStart}
-          />
+          <div key={c._id} className="animate-slide-up">
+            <Card
+              _id={c._id}
+              title={c.title}
+              description={c.description}
+              priority={c.priority}
+              deadline={c.deadline}
+              datetime={c.datetime}
+              status={c.status}
+              handleDragStart={handleDragStart}
+            />
+          </div>
         ))}
         <DropIndicator beforeId={null} status={status} />
         <AddCard />
@@ -329,14 +326,14 @@ const Card: React.FC<CardProps> = ({
 
   return (
     <>
-      <div className="overflow-hidden">
+      <div className="">
         <DropIndicator beforeId={_id} status={status} />
         <motion.div
           layout
           layoutId={_id}
           draggable="true"
           onDragStart={handleDragStartWrapper}
-          className="animate-slide-up cursor-grab flex flex-col gap-1 p-3 rounded-2xl text-black bg-slate-200 shadow-lg hover:scale-105 active:cursor-grabbing ease-in-out duration-500 overflow-hidden"
+          className="cursor-grab flex flex-col gap-1 p-3 rounded-2xl text-black bg-slate-200 shadow-lg active:cursor-grabbing"
         >
           <div className="text-md font-bold text-balance">{title}</div>
           <div className="text-sm text-wrap">{description}</div>
@@ -356,7 +353,7 @@ const Card: React.FC<CardProps> = ({
   );
 };
 
-const TaskTime = ({ datetime }: { datetime: string }) => {
+export const TaskTime = ({ datetime }: { datetime: string }) => {
   // calculating time difference between task-created and current-time
   const timeAgo = (dateString: string) => {
     const now = new Date();
