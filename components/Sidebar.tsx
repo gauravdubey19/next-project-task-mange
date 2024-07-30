@@ -22,7 +22,7 @@ const Sidebar: React.FC = () => {
     <>
       <div className="hidden sticky left-0 top-0 md:flex-between flex-col w-[18vw] h-screen border-r shadow-xl px-1.5 py-4 overflow-hidden">
         <div className="w-full flex flex-col gap-4">
-          <div className="animate-slide-down flex-between flex-wrap capitalize font-bold">
+          <div className="animate-slide-down flex-between flex-wrap gap-2 capitalize font-bold">
             <div className="text-xl">{user?.name || "GoTask"}</div>
             {session && (
               <button
