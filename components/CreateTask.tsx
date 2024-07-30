@@ -100,7 +100,7 @@ const CreateTask: React.FC = () => {
     }
   };
 
-  if (sessionStatus === "unauthenticated") router.push("/sign-in");
+  if (sessionStatus === "unauthenticated") router.replace("/sign-in");
 
   return (
     <section className="relative w-full p-4 overflow-hidden">
@@ -168,6 +168,7 @@ const CreateTask: React.FC = () => {
                   name="deadline"
                   className="w-full bg-transparent outline-none hover:border-b focus:border-b"
                   value={deadline}
+                  min={new Date().toISOString().slice(0, 16)}
                   onChange={(e) => setDeadline(e.target.value)}
                 />
               </td>

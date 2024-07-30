@@ -22,12 +22,13 @@ export interface CustomToken extends Record<string, any> {
 }
 
 export interface UserSession extends NextAuthSession {
-  user: {
-    _id?: string;
-    name?: string;
-    email: string;
-    role?: string;
-  };
+  user: Users;
+}
+export interface Users {
+  _id?: string;
+  name?: string;
+  email: string;
+  role?: string;
 }
 
 export interface TaskProps {

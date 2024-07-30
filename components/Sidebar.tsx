@@ -9,16 +9,19 @@ import { GrTasks } from "react-icons/gr";
 import { LuCalendarPlus } from "react-icons/lu";
 import { MdOutlineArrowForwardIos } from "react-icons/md";
 import { FaGithub } from "react-icons/fa";
+import { GrUserAdmin } from "react-icons/gr";
 
 const Sidebar: React.FC = () => {
   const pathname = usePathname();
   const { data: session } = useSession();
   const user = session?.user as UserSession["user"] | undefined;
+  // console.log(user);
+
   if (pathname == "/sign-in" || pathname == "/sign-up") return null;
   return (
     <>
       <div className="hidden sticky left-0 top-0 md:flex-between flex-col w-[18vw] h-screen border-r shadow-xl px-1.5 py-4 overflow-hidden">
-        <div className="flex flex-col gap-4">
+        <div className="w-full flex flex-col gap-4">
           <div className="animate-slide-down flex-between flex-wrap capitalize font-bold">
             <div className="text-xl">{user?.name || "GoTask"}</div>
             {session && (
@@ -56,13 +59,23 @@ const Sidebar: React.FC = () => {
             </div>
           )}
         </div>
-        <Link
-          href="https://github.com/gauravdubey19/next-project-task-mange"
-          target="_blank"
-          className="w-full flex-center gap-4 p-4 font-semibold text-lg bg-zinc-200 rounded-2xl scale-95 hover:scale-100 active:scale-95 active:translate-y-1 ease-in-out duration-300 overflow-hidden"
-        >
-          <FaGithub size={25} /> Source Code
-        </Link>
+        <div className="flex flex-col gap-3">
+          {user?.role == "admin" && (
+            <Link
+              href="/admin"
+              className="w-full flex-center gap-4 p-4 font-semibold text-lg bg-zinc-200 rounded-2xl scale-95 hover:scale-100 active:scale-95 active:translate-y-1 ease-in-out duration-300 overflow-hidden"
+            >
+              <GrUserAdmin size={25} /> Admin
+            </Link>
+          )}
+          <Link
+            href="https://github.com/gauravdubey19/next-project-task-mange"
+            target="_blank"
+            className="w-full flex-center gap-4 p-4 font-semibold text-lg bg-zinc-200 rounded-2xl scale-95 hover:scale-100 active:scale-95 active:translate-y-1 ease-in-out duration-300 overflow-hidden"
+          >
+            <FaGithub size={25} /> Source Code
+          </Link>
+        </div>
       </div>
     </>
   );

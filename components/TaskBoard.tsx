@@ -2,7 +2,6 @@
 
 import { DragEvent, useEffect, useState } from "react";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
 import { deleteTask, getTasks, updateStatus } from "@/app/actions/task.actions";
 import { motion } from "framer-motion";
 import CountUp from "react-countup";
@@ -19,38 +18,29 @@ import { BsClockHistory } from "react-icons/bs";
 import { toast } from "./ui/use-toast";
 
 export default function TaskBoard() {
-  const [userTasks, setUserTasks] = useState<TasksValues[] | []>([]);
-
-  useEffect(() => {
-    const fetchUserTasks = async () => {
-      try {
-        const res = await getTasks();
-        if (res) setUserTasks(res);
-      } catch (error) {
-        console.error("Failed to fetch tasks:", error);
-      }
-    };
-
-    if (userTasks?.length === 0) fetchUserTasks();
-  }, [userTasks]);
-  // console.log(userTasks);
-
   return (
     <div className="h-screen w-full bg-gradient-to-b from-white to-violet-700 text-neutral-50 overflow-hidden">
-      <BoardContent cards={userTasks} />
+      <BoardContent />
     </div>
   );
 }
 
-const BoardContent: React.FC<{ cards: TasksValues[] }> = ({ cards }) => {
-  const [cardsState, setCardsState] = useState<TasksValues[]>(cards);
-  useEffect(() => {
-    const fetchUserTasks = async () => {
-      if (cards) setCardsState(cards);
-    };
+const BoardContent: React.FC = () => {
+  const [cardsState, setCardsState] = useState<TasksValues[]>([]);
 
+  const fetchUserTasks = async () => {
+    try {
+      const res = await getTasks();
+      if (res) setCardsState(res);
+    } catch (error) {
+      console.error("Failed to fetch tasks:", error);
+    }
+  };
+
+  useEffect(() => {
     if (cardsState?.length === 0) fetchUserTasks();
-  }, [cards, cardsState]);
+  }, [cardsState]);
+  // console.log(cardsState);
 
   return (
     <div className="flex h-full w-full gap-3 p-5 overflow-scroll">
@@ -101,13 +91,12 @@ const DeleteTask: React.FC<DeleteTaskProps> = ({ setCards }) => {
   const handleDragEnd = async (e: DragEvent<HTMLDivElement>) => {
     const cardId = e.dataTransfer.getData("cardId");
 
-    setCards((prevCards) => prevCards.filter((c) => c._id !== cardId));
-
     try {
       const res = await deleteTask({ cardId });
       if (res === "deleted") {
+        setCards((prevCards) => prevCards.filter((c) => c._id !== cardId));
         toast({
-          title: "Task Deleted successfully!",
+          title: "♻ Task Deleted successfully!",
           description: `Deleted from your tasks list...`,
         });
       }
@@ -120,9 +109,9 @@ const DeleteTask: React.FC<DeleteTaskProps> = ({ setCards }) => {
       }
     } catch (error) {
       console.error("Task deletion failed:", error);
+    } finally {
+      setActive(false);
     }
-
-    setActive(false);
   };
 
   return (
@@ -159,7 +148,7 @@ const Column: React.FC<ColumnProps> = ({
 
     if (res == "task-updated") {
       toast({
-        title: "Task Status updated successfully!",
+        title: "✅ Task Status updated successfully!",
         description: `Updated to ${newStatus}`,
       });
     }

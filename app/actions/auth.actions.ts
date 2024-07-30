@@ -46,4 +46,7 @@ const forgotPassword = async ({ name, email, password }: RegisterParams) => {
   }
 };
 
+
+
+
 export { register, forgotPassword };
