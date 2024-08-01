@@ -13,7 +13,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "GoTaskManage",
   description:
-    "'GoTaskManage' a robust Task-Management App that offers secure user authentication with session, a personalized Task-Board with columns/status of 'To-Do', 'In Progress', 'Under Review', and 'Finished'.\n Users can create, edit, and delete tasks, set priorities and deadlines, and enjoy drag-and-drop functionality for easy task movement.\n All data is securely stored and each user can only manage their own tasks.",
+    "'GoTaskManage' a robust Task-Management App that offers secure user authentication with session, a personalized Task-Board with columns/status of 'To-Do', 'In Progress', 'Under Review', and 'Finished'.\n Users can create, edit, and delete tasks, set priorities and deadlines, and enjoy drag-and-drop functionality for easy task movement.\n All data is securely stored and each user can only manage and search their own tasks.",
   icons: { icon: "/logo.webp" },
   keywords:
     "task management, productivity, efficiency, to-do list, Task Manage Next.js app",
